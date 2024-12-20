@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const KOIOS_URL = "http://localhost:7070/proxy"
+//const KOIOS_URL = "http://localhost:7070/proxy" // use this for proxy
+const KOIOS_URL = "https://api.koios.rest/api/v1" // use this for direct koios
+
+const KOIOS_KEY = process.env.NEXT_PUBLIC_KOIOS_KEY; // your .env.local key 
 
 /**
  * Gets the blockchain tip with, this gives us the
@@ -24,12 +27,17 @@ const KOIOS_URL = "http://localhost:7070/proxy"
 
 export const getChainTip = async () => {
 
+	console.log('Loaded KOIOS_KEY:', KOIOS_KEY);
+
 	try {
 		const response = await axios({
 			method: 'get',
 			url: '/tip',
 			baseURL: KOIOS_URL,
-			headers: {'accept': 'application/json'},
+			headers: {
+                'accept': 'application/json',
+                'Authorization': `Bearer ${KOIOS_KEY}`, 
+            },
 
 		})
 
@@ -108,7 +116,10 @@ export const getProtocolParams = async () => {
 			method: 'get',
 			url: '/cli_protocol_params',
 			baseURL: KOIOS_URL,
-			headers: {'accept': 'application/json'},
+			headers: {
+                'accept': 'application/json',
+                'Authorization': `Bearer ${KOIOS_KEY}`, 
+            },
 
 		})
 
@@ -166,7 +177,10 @@ export const getEpochInfo = async (currentEpochN) => {
 			url: '/epoch_info',
 			baseURL: KOIOS_URL,
 			params: payload,
-			headers: {'accept': 'application/json'},
+			headers: {
+                'accept': 'application/json',
+                'Authorization': `Bearer ${KOIOS_KEY}`, 
+            },
 
 		})
 
@@ -218,7 +232,10 @@ export const getReserves = async (currentEpochN) => {
 			url: '/totals',
 			baseURL: KOIOS_URL,
 			params: payload,
-			headers: {'accept': 'application/json'},
+			headers: {
+                'accept': 'application/json',
+                'Authorization': `Bearer ${KOIOS_KEY}`, 
+            },
 
 		})
 
@@ -286,7 +303,10 @@ export const getStakePoolList = async () => {
 				url: '/pool_list',
 				baseURL: KOIOS_URL,
 				params: payload,
-				headers: {'accept': 'application/json'},
+				headers: {
+					'accept': 'application/json',
+					'Authorization': `Bearer ${KOIOS_KEY}`, 
+				},
 
 			})
 
@@ -385,8 +405,11 @@ export const getStakePoolInfo = async (pool_bech32_id) => {
 			url: '/pool_info',
 			baseURL: KOIOS_URL,
 			data: JSON.stringify(req),
-			headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
-
+			headers: {
+				'Content-Type': 'application/json',
+                'accept': 'application/json',
+                'Authorization': `Bearer ${KOIOS_KEY}`, 
+            },
 		})
 
 		if (response.status === 200) {
